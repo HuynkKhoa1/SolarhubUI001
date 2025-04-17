@@ -5975,17 +5975,20 @@ end)
 
 -- Giao diện mobile
 if Mobile then
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local size = math.clamp(math.min(screenSize.X, screenSize.Y) * 0.15, 60, 100)
+
     Minimizer = New("Frame", {
         Parent = GUI,
-        Size = UDim2.new(0.08, 0, 0.16, 0),
+        Size = UDim2.new(0, size, 0, size),
         AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0), -- Chính giữa màn hình
         BackgroundTransparency = 1,
         ZIndex = 999999999,
     }, {
         New("Frame", {
             BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-            Size = UDim2.new(0, 100, 0, 100),
+            Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
             BorderSizePixel = 0
         }, {
