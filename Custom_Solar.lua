@@ -1,9 +1,4 @@
---[[             |
-'                |   Last changes:     
-Solar 1.2.2 |   06.03 - Fixed some themes and mobile button, added normal bypass to Fisch. 
-dsc.gg/hydrahub  |   31.01 - added Show_Assets toggle. Soon ill make normal bypass.
-'                |   29.01 - well well well removed last update, added "Bloody" theme and Solar-plus settings 😉
-]]--    
+Soi cái lồn mẹ tụi mày thằng mập
 
 --- Solar PLUS SETTINGS ---
 local Show_Button = true -- Shows the button for toggle Solar ui manually. If "false", works only on mobile, if "true", works everytime.
@@ -5791,10 +5786,18 @@ else
 	Solar = Library
 end
 
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+-- Debug để kiểm tra nút
+print("Khởi tạo MinimizeButton với hiệu ứng galaxy neon tối hơn...")
+
 local MinimizeButton = New("TextButton", {
     BackgroundTransparency = 1,
     Size = UDim2.new(0, 70, 0, 70),
-    BorderSizePixel = 0
+    BorderSizePixel = 0,
+    AutoButtonColor = false
 }, {
     New("UIPadding", {
         PaddingBottom = UDim.new(0, 2),
@@ -5803,9 +5806,10 @@ local MinimizeButton = New("TextButton", {
         PaddingTop = UDim.new(0, 2),
     }),
     New("Frame", {
+        Name = "ButtonFrame",
         Size = UDim2.new(1, 0, 1, 0),
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        BackgroundTransparency = 0,
+        BackgroundColor3 = Color3.fromRGB(5, 5, 15), -- Nền tối hơn cho cảm giác vũ trụ
+        BackgroundTransparency = 0.3,
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
         BorderSizePixel = 0,
@@ -5813,20 +5817,110 @@ local MinimizeButton = New("TextButton", {
         New("UICorner", {
             CornerRadius = UDim.new(1, 0),
         }),
+        New("UIGradient", {
+            Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(47, 0, 79)), -- Tím đậm hơn (#2F004F)
+                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 80, 150)), -- Hồng đậm (#C85096)
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 150, 200)) -- Xanh dương đậm hơn (#0096C8)
+            }),
+            Transparency = NumberSequence.new({
+                NumberSequenceKeypoint.new(0, 0.3),
+                NumberSequenceKeypoint.new(1, 0.3)
+            }),
+            Rotation = 45 -- Xoay gradient cho cảm giác vũ trụ
+        }),
+        New("UIStroke", {
+            Name = "InnerStroke",
+            Color = Color3.fromRGB(200, 80, 150), -- Hồng đậm làm viền chính
+            Thickness = 3,
+            Transparency = 0.1
+        }),
+        New("UIStroke", {
+            Name = "OuterStroke",
+            Color = Color3.fromRGB(47, 0, 79), -- Tím đậm hơn làm viền ngoài
+            Thickness = 6,
+            Transparency = 0.4
+        }),
         New("ImageLabel", {
             Image = Mobile and Button_Icon or "rbxassetid://94361536997609",
-            Size = UDim2.new(1, 0, 1, 0),
+            Size = UDim2.new(0.8, 0, 0.8, 0), -- Logo kích thước lớn
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
             BackgroundTransparency = 1,
             ImageColor3 = Color3.new(1, 1, 1),
+        }),
+        New("UIAspectRatioConstraint", {
+            AspectRatio = 1
         })
     })
 })
 
+-- Debug để xác nhận nút được tạo
+print("MinimizeButton với hiệu ứng galaxy neon tối hơn đã được tạo, kiểm tra CoreGui!")
+
+-- Hiệu ứng hover với nhấp nháy thiên hà
+MinimizeButton.MouseEnter:Connect(function()
+    local frame = MinimizeButton:FindFirstChild("ButtonFrame")
+    if frame then
+        local innerStroke = frame:FindFirstChild("InnerStroke")
+        local outerStroke = frame:FindFirstChild("OuterStroke")
+        if innerStroke then
+            TweenService:Create(innerStroke, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+                Transparency = 0,
+                Thickness = 4,
+                Color = Color3.fromRGB(220, 100, 170) -- Hồng sáng hơn khi hover
+            }):Play()
+            -- Nhấp nháy chậm như ánh sao
+            TweenService:Create(innerStroke, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+                Transparency = 0.05
+            }):Play()
+        end
+        if outerStroke then
+            TweenService:Create(outerStroke, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+                Transparency = 0.2,
+                Thickness = 10, -- Viền dày hơn cho hiệu ứng halo
+                Color = Color3.fromRGB(90, 30, 150) -- Tím sáng hơn khi hover
+            }):Play()
+        end
+        TweenService:Create(frame, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+            BackgroundTransparency = 0
+        }):Play()
+    end
+end)
+
+MinimizeButton.MouseLeave:Connect(function()
+    local frame = MinimizeButton:FindFirstChild("ButtonFrame")
+    if frame then
+        local innerStroke = frame:FindFirstChild("InnerStroke")
+        local outerStroke = frame:FindFirstChild("OuterStroke")
+        if innerStroke then
+            TweenService:Create(innerStroke, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+                Transparency = 0.1,
+                Thickness = 3,
+                Color = Color3.fromRGB(200, 80, 150) -- Trở lại hồng đậm
+            }):Play()
+            -- Hủy nhấp nháy
+            innerStroke:ClearAllChildren() -- Xóa tween nhấp nháy
+        end
+        if outerStroke then
+            TweenService:Create(outerStroke, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+                Transparency = 0.4,
+                Thickness = 6,
+                Color = Color3.fromRGB(47, 0, 79) -- Trở lại tím đậm
+            }):Play()
+        end
+        TweenService:Create(frame, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+            BackgroundTransparency = 0.3
+        }):Play()
+    end
+end)
+
+-- Vị trí mặc định PC, dịch sang trái 0.3cm (~12 pixels)
 local Minimizer = New("Frame", {
     Parent = game:GetService("CoreGui"),
     Size = UDim2.new(0, 70, 0, 70),
     AnchorPoint = Vector2.new(0, 1),
-    Position = UDim2.new(0, 6, 1, -15), -- Tạm thời, sẽ override lại bằng ViewportSize bên dưới
+    Position = UDim2.new(0, 32, 1, -15), -- X.Offset giảm từ 44 xuống 32
     BackgroundTransparency = 1,
     ZIndex = 999999999,
     Visible = true
@@ -5834,64 +5928,68 @@ local Minimizer = New("Frame", {
     MinimizeButton
 })
 
--- ✅ CHỈNH VỊ TRÍ CHÍNH XÁC DỰA TRÊN CHIỀU CAO MÀN HÌNH
-local RunService = game:GetService("RunService")
-task.defer(function()
-	RunService.RenderStepped:Wait() -- chờ frame đầu tiên render
-	local screenSize = workspace.CurrentCamera.ViewportSize
-	local btnSize = Minimizer.AbsoluteSize
+-- Debug để xác nhận Minimizer
+print("Minimizer đã được thêm vào CoreGui với hiệu ứng galaxy neon tối hơn!")
 
-	Minimizer.AnchorPoint = Vector2.new(0, 0)
-	Minimizer.Position = UDim2.new(0, 6, 0, screenSize.Y - btnSize.Y - 0)
+-- Căn lại vị trí theo chiều cao màn hình
+task.defer(function()
+    RunService.RenderStepped:Wait()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local btnSize = Minimizer.AbsoluteSize
+
+    Minimizer.AnchorPoint = Vector2.new(0, 0)
+    Minimizer.Position = UDim2.new(0, 32, 0, screenSize.Y - btnSize.Y) -- X.Offset = 32
+    print("Vị trí Minimizer đã được cập nhật: ", Minimizer.Position)
 end)
 
--- ✅ KÉO KHÔNG GIỚI HẠN
-local UserInputService = game:GetService("UserInputService")
+-- Kéo không giới hạn
 local dragging, dragInput, dragStart, startPos
 
 MinimizeButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = Minimizer.Position
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = Minimizer.Position
 
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
 end)
 
 MinimizeButton.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		dragInput = input
-	end
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - dragStart
-		Minimizer.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        Minimizer.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
 end)
 
+-- Giao diện mobile
 if Mobile then
     Minimizer = New("Frame", {
         Parent = GUI,
         Size = UDim2.new(0.08, 0, 0.16, 0),
-        Position = UDim2.new(0.85, 0, 0.85, 0),  -- Đặt nút ở góc dưới bên phải
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
         BackgroundTransparency = 1,
         ZIndex = 999999999,
     }, {
         New("Frame", {
             BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-            Size = UDim2.new(0, 100, 0, 100),  -- Đặt kích thước Frame bao quanh khớp với kích thước nút
+            Size = UDim2.new(0, 100, 0, 100),
             BackgroundTransparency = 1,
             BorderSizePixel = 0
         }, {
@@ -5904,15 +6002,15 @@ if Mobile then
 else
     Minimizer = New("Frame", {
         Parent = GUI,
-        Size = UDim2.new(0, 100, 0, 100),  -- Kích thước nút bao quanh
-        Position = UDim2.new(0.85, 0, 0.85, 0),  -- Đặt nút ở góc dưới bên phải
+        Size = UDim2.new(0, 100, 0, 100),
+        Position = UDim2.new(0.85, 0, 0.85, 0),
         BackgroundTransparency = 1,
         ZIndex = 999999999,
         Visible = true
     }, {
         New("Frame", {
             BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-            Size = UDim2.new(0, 50, 0, 50),  -- Đảm bảo kích thước Frame khớp với nút
+            Size = UDim2.new(0, 50, 0, 50),
             BackgroundTransparency = 0,
             BorderSizePixel = 0
         }, {
@@ -5923,7 +6021,6 @@ else
         })
     })
 end
-
 
 Creator.AddSignal(Minimizer.InputBegan, function(Input)
 	if
