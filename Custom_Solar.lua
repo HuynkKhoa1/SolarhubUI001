@@ -1053,23 +1053,6 @@ function AcrylicPaint()
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BorderSizePixel = 0,
 		}, {
-			New("UIStroke", {
-				Name = "ThemeStroke",
-				Thickness = 3,
-				Transparency = 0,
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				Color = Color3.fromRGB(120, 80, 255),
-			}, {
-				New("UIGradient", {
-					Color = ColorSequence.new({
-						ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 80, 255)),
-						ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
-						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 100, 255)),
-					}),
-					Rotation = 45,
-				}),
-			}),
-
 			New("ImageLabel", {
 				Image = "rbxassetid://8992230677",
 				ScaleType = "Slice",
@@ -1163,50 +1146,8 @@ function AcrylicPaint()
 			}),
 		})
 
-		-- Handle theme-based stroke color update
-		local stroke = AcrylicPaint.Frame:FindFirstChild("ThemeStroke")
-		local function updateThemeStroke()
-			local theme = Creator.Theme
-			if not stroke then return end
-			for _, v in ipairs(stroke:GetChildren()) do
-				if v:IsA("UIGradient") then v:Destroy() end
-			end
-			if theme == "AMOLED" then
-				stroke.Color = Color3.fromRGB(255, 255, 255)
-			elseif theme == "Grape" then
-				stroke.Color = Color3.fromRGB(183, 176, 223)
-			elseif theme == "Solar" then
-				stroke.Color = Color3.new(1, 1, 1)
-				local gradient = Instance.new("UIGradient")
-				gradient.Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
-					ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
-					ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
-					ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
-					ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
-					ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
-					ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 0, 0))
-				})
-				gradient.Rotation = 0
-				gradient.Parent = stroke
-				local TweenService = game:GetService("TweenService")
-				task.spawn(function()
-					while gradient.Parent == stroke do
-						TweenService:Create(gradient, TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
-							Rotation = 360
-						}):Play()
-						task.wait(5)
-					end
-				end)
-			end
-		end
-		updateThemeStroke()
-		Creator.UpdateTheme = function()
-			-- các cập nhật khác nếu có...
-			updateThemeStroke()
-		end
-
 		local Blur
+
 		if Library.UseAcrylic then
 			Blur = AcrylicBlur()
 			Blur.Frame.Parent = AcrylicPaint.Frame
@@ -1218,7 +1159,6 @@ function AcrylicPaint()
 		return AcrylicPaint
 	end
 end
-
 
 local Acrylic = {
 	AcrylicBlur = AcrylicBlur(),
