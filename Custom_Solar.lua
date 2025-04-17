@@ -5974,27 +5974,23 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 -- Giao diện mobile
+-- Giao diện mobile
 if Mobile then
     local screenSize = workspace.CurrentCamera.ViewportSize
     local size = math.clamp(math.min(screenSize.X, screenSize.Y) * 0.15, 60, 100)
-    
-    -- Vị trí chính giữa màn hình, đảm bảo không bị biến mất khỏi viền
-    local safeOffset = size / 2  -- Tạo khoảng cách an toàn từ viền
-    local posX = math.clamp(screenSize.X * 0.5, safeOffset, screenSize.X - safeOffset)
-    local posY = math.clamp(screenSize.Y * 0.5, safeOffset, screenSize.Y - safeOffset)
     
     Minimizer = New("Frame", {
         Parent = GUI,
         Size = UDim2.new(0, size, 0, size),
         AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0, posX, 0, posY),  -- Sử dụng vị trí tuyệt đối thay vì tỉ lệ
+        Position = UDim2.new(0.45, 0, 0.025, 0),  -- Sử dụng position từ script mẫu
         BackgroundTransparency = 1,
         ZIndex = 999999999,
     }, {
         New("Frame", {
             BackgroundColor3 = Color3.fromRGB(0, 0, 0),
             Size = UDim2.new(1, 0, 1, 0),
-            BackgroundTransparency = 0.3,  -- Giảm độ trong suốt để dễ nhìn hơn
+            BackgroundTransparency = 0.3,
             BorderSizePixel = 0
         }, {
             New("UICorner", {
@@ -6007,7 +6003,7 @@ else
     Minimizer = New("Frame", {
         Parent = GUI,
         Size = UDim2.new(0, 100, 0, 100),
-        Position = UDim2.new(0.85, 0, 0.85, 0),
+        Position = UDim2.new(0.85, 0, 0.85, 0),  -- Giữ nguyên position của PC
         BackgroundTransparency = 1,
         ZIndex = 999999999,
         Visible = true
