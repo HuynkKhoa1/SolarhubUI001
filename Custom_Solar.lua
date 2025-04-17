@@ -1053,6 +1053,23 @@ function AcrylicPaint()
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BorderSizePixel = 0,
 		}, {
+			New("UIStroke", {
+				Name = "ThemeStroke",
+				Thickness = 3,
+				Transparency = 0,
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+				Color = Color3.fromRGB(120, 80, 255),
+			}, {
+				New("UIGradient", {
+					Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 80, 255)),
+						ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 100, 255)),
+					}),
+					Rotation = 45,
+				}),
+			}),
+
 			New("ImageLabel", {
 				Image = "rbxassetid://8992230677",
 				ScaleType = "Slice",
@@ -1146,8 +1163,50 @@ function AcrylicPaint()
 			}),
 		})
 
-		local Blur
+		-- Handle theme-based stroke color update
+		local stroke = AcrylicPaint.Frame:FindFirstChild("ThemeStroke")
+		local function updateThemeStroke()
+			local theme = Creator.Theme
+			if not stroke then return end
+			for _, v in ipairs(stroke:GetChildren()) do
+				if v:IsA("UIGradient") then v:Destroy() end
+			end
+			if theme == "AMOLED" then
+				stroke.Color = Color3.fromRGB(255, 255, 255)
+			elseif theme == "Grape" then
+				stroke.Color = Color3.fromRGB(183, 176, 223)
+			elseif theme == "Solar" then
+				stroke.Color = Color3.new(1, 1, 1)
+				local gradient = Instance.new("UIGradient")
+				gradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
+					ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
+					ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
+					ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+					ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+					ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
+					ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 0, 0))
+				})
+				gradient.Rotation = 0
+				gradient.Parent = stroke
+				local TweenService = game:GetService("TweenService")
+				task.spawn(function()
+					while gradient.Parent == stroke do
+						TweenService:Create(gradient, TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
+							Rotation = 360
+						}):Play()
+						task.wait(5)
+					end
+				end)
+			end
+		end
+		updateThemeStroke()
+		Creator.UpdateTheme = function()
+			-- các cập nhật khác nếu có...
+			updateThemeStroke()
+		end
 
+		local Blur
 		if Library.UseAcrylic then
 			Blur = AcrylicBlur()
 			Blur.Frame.Parent = AcrylicPaint.Frame
@@ -1159,6 +1218,7 @@ function AcrylicPaint()
 		return AcrylicPaint
 	end
 end
+
 
 local Acrylic = {
 	AcrylicBlur = AcrylicBlur(),
@@ -5795,6 +5855,9 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+-- Debug để kiểm tra nút
+print("Khởi tạo MinimizeButton với hiệu ứng galaxy neon tối hơn...")
+
 local MinimizeButton = New("TextButton", {
     BackgroundTransparency = 1,
     Size = UDim2.new(0, 70, 0, 70),
@@ -5856,6 +5919,9 @@ local MinimizeButton = New("TextButton", {
         })
     })
 })
+
+-- Debug để xác nhận nút được tạo
+print("MinimizeButton với hiệu ứng galaxy neon tối hơn đã được tạo, kiểm tra CoreGui!")
 
 -- Hiệu ứng hover với nhấp nháy thiên hà
 MinimizeButton.MouseEnter:Connect(function()
@@ -5927,6 +5993,9 @@ local Minimizer = New("Frame", {
     MinimizeButton
 })
 
+-- Debug để xác nhận Minimizer
+print("Minimizer đã được thêm vào CoreGui với hiệu ứng galaxy neon tối hơn!")
+
 -- Căn lại vị trí theo chiều cao màn hình
 task.defer(function()
     RunService.RenderStepped:Wait()
@@ -5975,20 +6044,17 @@ end)
 
 -- Giao diện mobile
 if Mobile then
-    local screenSize = workspace.CurrentCamera.ViewportSize
-    local size = math.clamp(math.min(screenSize.X, screenSize.Y) * 0.15, 60, 100)
-
     Minimizer = New("Frame", {
         Parent = GUI,
-        Size = UDim2.new(0, size, 0, size),
+        Size = UDim2.new(0.08, 0, 0.16, 0),
         AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0), -- Chính giữa màn hình
+        Position = UDim2.new(0.5, 0, 0.5, 0),
         BackgroundTransparency = 1,
         ZIndex = 999999999,
     }, {
         New("Frame", {
             BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-            Size = UDim2.new(1, 0, 1, 0),
+            Size = UDim2.new(0, 100, 0, 100),
             BackgroundTransparency = 1,
             BorderSizePixel = 0
         }, {
