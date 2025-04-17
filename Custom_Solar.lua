@@ -5795,9 +5795,6 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
--- Debug để kiểm tra nút
-print("Khởi tạo MinimizeButton với hiệu ứng galaxy neon tối hơn...")
-
 local MinimizeButton = New("TextButton", {
     BackgroundTransparency = 1,
     Size = UDim2.new(0, 70, 0, 70),
@@ -5859,9 +5856,6 @@ local MinimizeButton = New("TextButton", {
         })
     })
 })
-
--- Debug để xác nhận nút được tạo
-print("MinimizeButton với hiệu ứng galaxy neon tối hơn đã được tạo, kiểm tra CoreGui!")
 
 -- Hiệu ứng hover với nhấp nháy thiên hà
 MinimizeButton.MouseEnter:Connect(function()
@@ -5932,9 +5926,6 @@ local Minimizer = New("Frame", {
 }, {
     MinimizeButton
 })
-
--- Debug để xác nhận Minimizer
-print("Minimizer đã được thêm vào CoreGui với hiệu ứng galaxy neon tối hơn!")
 
 -- Căn lại vị trí theo chiều cao màn hình
 task.defer(function()
