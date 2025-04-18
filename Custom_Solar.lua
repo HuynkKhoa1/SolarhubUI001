@@ -5,7 +5,7 @@ dsc.gg/hydrahub  |   31.01 - added Show_Assets toggle. Soon ill make normal bypa
 '                |   29.01 - well well well removed last update, added "Bloody" theme and Solar-plus settings 😉
 ]]--    
 
-Soi cai dit me may thang map
+-- Soi cai dit me may thang map
 
 --- Solar PLUS SETTINGS ---
 local Show_Button = true -- Shows the button for toggle Solar ui manually. If "false", works only on mobile, if "true", works everytime.
