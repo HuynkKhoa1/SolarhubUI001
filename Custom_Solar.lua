@@ -8,7 +8,7 @@ dsc.gg/hydrahub  |   31.01 - added Show_Assets toggle. Soon ill make normal bypa
 -- Soi cai dit me may thang map
 
 --- Solar PLUS SETTINGS ---
-local Show_Button = true -- Shows the button for toggle Solar ui manually. If "false", works only on mobile, if "true", works everytime.
+local Show_Button = false -- Shows the button for toggle Solar ui manually. If "false", works only on mobile, if "true", works everytime.
 local Button_Icon = "rbxassetid://94361536997609" -- Icon of the button for toggle Solar ui
 ----------------------------
 
