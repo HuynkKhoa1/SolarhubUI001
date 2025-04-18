@@ -5,6 +5,8 @@ dsc.gg/hydrahub  |   31.01 - added Show_Assets toggle. Soon ill make normal bypa
 '                |   29.01 - well well well removed last update, added "Bloody" theme and Solar-plus settings 😉
 ]]--    
 
+Soi cai dit me may thang map
+
 --- Solar PLUS SETTINGS ---
 local Show_Button = true -- Shows the button for toggle Solar ui manually. If "false", works only on mobile, if "true", works everytime.
 local Button_Icon = "rbxassetid://94361536997609" -- Icon of the button for toggle Solar ui
@@ -5795,9 +5797,6 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
--- Debug để kiểm tra nút
-print("Khởi tạo MinimizeButton với hiệu ứng galaxy neon tối hơn...")
-
 local MinimizeButton = New("TextButton", {
     BackgroundTransparency = 1,
     Size = UDim2.new(0, 70, 0, 70),
@@ -5937,7 +5936,6 @@ task.defer(function()
 
     Minimizer.AnchorPoint = Vector2.new(0, 0)
     Minimizer.Position = UDim2.new(0, 32, 0, screenSize.Y - btnSize.Y) -- X.Offset = 32
-    print("Vị trí Minimizer đã được cập nhật: ", Minimizer.Position)
 end)
 
 -- Kéo không giới hạn
